@@ -47,6 +47,15 @@ public class ProjectService {
                 .map(ViewProjectResponseConverter::from)
                 .collect(Collectors.toList());
     }
+
+    public List<ViewProjectListResponse> viewMyProjectList(Long userId){
+        List<Project> result = projectRepository.findByUserIdAndIsDeletedFalse(userId);
+        return result.stream()
+                .map(ViewProjectResponseConverter::from)
+                .collect(Collectors.toList());
+    }
+
+
     public void editProject(EditProjectRequest request, Long projectId, Long userId){
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NoSuchElementException("요청에 대한 응답을 찾을 수 없습니다."));

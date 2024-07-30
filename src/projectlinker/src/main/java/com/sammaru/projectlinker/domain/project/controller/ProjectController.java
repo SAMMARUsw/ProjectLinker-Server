@@ -48,6 +48,11 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.viewProject(projectId));
     }
 
+    @GetMapping("/{userId}/me")
+    public ResponseEntity<List<ViewProjectListResponse>> viewMyProject(@PathVariable @Valid Long userId){
+        return ResponseEntity.ok(projectService.viewMyProjectList(userId));
+    }
+
     @DeleteMapping("/{projectId}")
     public ResponseEntity<Void> deleteProject(@RequestHeader("Authorization") String token
             , @PathVariable @Valid Long projectId){
