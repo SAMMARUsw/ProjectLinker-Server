@@ -9,7 +9,10 @@ public record SignUpRequest(
         String phnum,
         String university,
         String major,
-        String interest,
+        String grade,
+        String universityStatus,
+        String introduce,
+        String experience,
         List<String> skills
 ) {
 }

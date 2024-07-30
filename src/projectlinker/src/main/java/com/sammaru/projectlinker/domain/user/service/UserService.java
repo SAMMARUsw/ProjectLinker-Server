@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -41,7 +43,10 @@ public class UserService {
                 request.phnum(),
                 request.university(),
                 request.major(),
-                request.interest()
+                request.grade(),
+                request.universityStatus(),
+                request.introduce(),
+                request.experience()
         );
         userRepository.save(user);
 
@@ -59,8 +64,42 @@ public class UserService {
 
         targetUser.editProfile(
                 request.nickname(),
-                request.phnum()
+                request.phnum(),
+                request.university(),
+                request.major(),
+                request.grade(),
+                request.universityStatus(),
+                request.introduce(),
+                request.experience()
         );
+
+        List<UserSkill> existingSkills = targetUser.getUserSkills();
+        List<String> newSkillNames = request.skills();
+
+        Set<String> existingSkillNames = existingSkills.stream()
+                .map(UserSkill::getSkillName)
+                .collect(Collectors.toSet());
+
+        List<UserSkill> skillsToRemove = existingSkills.stream()
+                .filter(skill -> !newSkillNames.contains(skill.getSkillName()))
+                .collect(Collectors.toList());
+
+        for (UserSkill skillToRemove : skillsToRemove) {
+            targetUser.getUserSkills().remove(skillToRemove);
+            userSkillRepository.delete(skillToRemove);
+        }
+
+        List<String> skillsToAdd = newSkillNames.stream()
+                .filter(skillName -> !existingSkillNames.contains(skillName))
+                .collect(Collectors.toList());
+
+        for (String skillName : skillsToAdd) {
+            UserSkill newUserSkill = UserSkill.create(skillName);
+            userSkillRepository.save(newUserSkill);
+            targetUser.getUserSkills().add(newUserSkill);
+        }
+
+        userRepository.save(targetUser);
     }
 
     public void resignUser(String token) {

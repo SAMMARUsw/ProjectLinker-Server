@@ -39,15 +39,25 @@ public class User extends BaseEntity {
     @Column(name = "major", nullable = false)
     private String major;
 
-    @Column(name = "interest", nullable = false)
-    private String interest;
+    @Column(name = "grade", nullable = false)
+    private String grade;
+
+    @Column(name = "university_status", nullable = false)
+    private String universityStatus;
+
+    @Column(name = "introduce")
+    private String introduce;
+
+    @Column(name = "experience")
+    private String experience;
 
     @OneToMany
     @JoinColumn(name = "user_id")
     @Builder.Default
     private List<UserSkill> userSkills = new ArrayList<>();
 
-    public static User signUp(String email, String password, String name, String phnum, String university, String major, String interest) {
+    public static User signUp(String email, String password, String name, String phnum, String university, String major, String grade,
+                              String universityStatus, String introduce, String experience) {
         return User.builder()
                 .email(email)
                 .password(password)
@@ -55,13 +65,23 @@ public class User extends BaseEntity {
                 .phnum(phnum)
                 .university(university)
                 .major(major)
-                .interest(interest)
+                .grade(grade)
+                .universityStatus(universityStatus)
+                .introduce(introduce)
+                .experience(experience)
                 .build();
     }
 
-    public void editProfile(String name, String phnum) {
+    public void editProfile(String name, String phnum, String university, String major, String grade,
+                            String universityStatus, String introduce, String experience) {
         this.name = name;
         this.phnum = phnum;
+        this.university = university;
+        this.major = major;
+        this.grade = grade;
+        this.universityStatus = universityStatus;
+        this.introduce = introduce;
+        this.experience = experience;
     }
 
 }
