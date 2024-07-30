@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ApplicationStatus {
-    심사중("onreview"),
+    심사중("on review"),
     수락("accept"),
     거절("reject");
 
