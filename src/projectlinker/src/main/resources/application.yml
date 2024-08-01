@@ -37,6 +37,6 @@ crawling:
   attribute:
     image: "data-image"
 schedule:
-  cron: 0 * * * * * # 테스트 시 1분에 한번씩 크롤링 요청을 하기 위한 크론식
-#  cron: 0 0 0 * * * # 실제 사용지 매일 자정에 크롤링 요청을 하기 위한 크론식
+#  cron: 0 * * * * * # 테스트 시 1분에 한번씩 크롤링 요청을 하기 위한 크론식
+  cron: 0 0 0 * * * # 실제 사용지 매일 자정에 크롤링 요청을 하기 위한 크론식
   activate: true

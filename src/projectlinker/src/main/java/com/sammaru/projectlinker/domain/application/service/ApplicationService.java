@@ -1,18 +1,25 @@
 package com.sammaru.projectlinker.domain.application.service;
 
 import com.sammaru.projectlinker.domain.application.domain.Application;
+import com.sammaru.projectlinker.domain.application.domain.ApplicationStatus;
 import com.sammaru.projectlinker.domain.application.payload.request.CheckProjectApplyRequest;
 import com.sammaru.projectlinker.domain.application.payload.request.CreateApplicationRequest;
 import com.sammaru.projectlinker.domain.application.payload.response.ProjectApplyResponse;
+import com.sammaru.projectlinker.domain.application.payload.response.ProjectMemberResponse;
 import com.sammaru.projectlinker.domain.application.repository.ApplicationRepository;
 import com.sammaru.projectlinker.domain.application.util.ProjectApplyResponseConverter;
+import com.sammaru.projectlinker.domain.project.domain.Project;
 import com.sammaru.projectlinker.domain.project.exception.AlreadyDeletedException;
 import com.sammaru.projectlinker.domain.project.exception.UnAuthorizationException;
+import com.sammaru.projectlinker.domain.project.repository.ProjectRepository;
+import com.sammaru.projectlinker.domain.user.domain.User;
+import com.sammaru.projectlinker.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -23,6 +30,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ApplicationService {
     private final ApplicationRepository applicationRepository;
+    private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
 
     public void createApplication(Long userId, Long projectId, CreateApplicationRequest request){
         applicationRepository.save(
@@ -46,6 +55,11 @@ public class ApplicationService {
         }
 
         target.checkApply(request.status());
+
+        Project targetProject = projectRepository.findByProjectIdAndIsDeletedFalse(target.getProjectId())
+                .orElseThrow(() -> new NoSuchElementException());
+
+        targetProject.incCurrentNum();
     }
 
     public List<ProjectApplyResponse> viewProjectApply(Long projectId){
@@ -60,6 +74,20 @@ public class ApplicationService {
         return result.stream()
                 .map(ProjectApplyResponseConverter::from)
                 .collect(Collectors.toList());
+    }
+
+    public List<ProjectMemberResponse> viewProjectMembers(Long projectId){
+        List<Application> result = applicationRepository.findByProjectIdAndStatusAndIsDeletedFalse(projectId, ApplicationStatus.ACCEPT);
+        List<ProjectMemberResponse> resultResponse = new ArrayList<>();
+        for(Application target : result){
+            User targetUser = userRepository.findByUserIdAndIsDeletedIsFalse(target.getUserId())
+                    .orElseThrow(()-> new NoSuchElementException());
+            resultResponse.add(ProjectMemberResponse.builder()
+                            .name(targetUser.getName())
+                            .email(targetUser.getEmail())
+                    .build());
+        }
+        return resultResponse;
     }
 
 

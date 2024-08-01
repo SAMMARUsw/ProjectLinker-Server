@@ -56,4 +56,8 @@ public class Project extends BaseEntity {
         this.vacancyNum = vacancyNum;
         this.currentNum = currentNum;
     }
+
+    public void incCurrentNum(){
+        this.currentNum++;
+    }
 }

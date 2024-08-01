@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum ApplicationStatus {
-    심사중("on review"),
-    수락("accept"),
-    거절("reject");
+    ON_REVIEW("on review"),
+    ACCEPT("accept"),
+    REJECT("reject");
 
     private String status;
 

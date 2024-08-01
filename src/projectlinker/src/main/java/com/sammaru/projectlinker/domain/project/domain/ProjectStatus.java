@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum ProjectStatus {
-    모집중("recruiting"),
-    모집완료("cloosed"),
-    종료("end");
+    RECRUITING("recruiting"),
+    CLOSED("closed"),
+    END("end");
 
     private String status;
 

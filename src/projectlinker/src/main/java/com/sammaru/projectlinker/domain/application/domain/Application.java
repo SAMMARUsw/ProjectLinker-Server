@@ -26,6 +26,7 @@ public class Application extends BaseEntity {
     @Column(name = "project_id", nullable = false)
     private Long projectId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private ApplicationStatus status;
 
@@ -34,7 +35,7 @@ public class Application extends BaseEntity {
                 .message(message)
                 .userId(userId)
                 .projectId(projectId)
-                .status(ApplicationStatus.심사중)
+                .status(ApplicationStatus.ACCEPT)
                 .build();
     }
 
