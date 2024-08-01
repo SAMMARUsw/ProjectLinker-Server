@@ -5,8 +5,10 @@ import com.sammaru.projectlinker.domain.user.domain.UserSkill;
 import com.sammaru.projectlinker.domain.user.exception.exceptions.DuplicateEmailException;
 import com.sammaru.projectlinker.domain.user.payload.request.EditProfileRequest;
 import com.sammaru.projectlinker.domain.user.payload.request.SignUpRequest;
+import com.sammaru.projectlinker.domain.user.payload.response.UserInfo;
 import com.sammaru.projectlinker.domain.user.repository.UserRepository;
 import com.sammaru.projectlinker.domain.user.repository.UserSkillRepository;
+import com.sammaru.projectlinker.domain.user.util.UserInfoConverter;
 import com.sammaru.projectlinker.global.component.token.TokenResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -60,7 +63,7 @@ public class UserService {
 
     public void editProfile(String token, EditProfileRequest request){
         User targetUser = userRepository.findByUserIdAndIsDeletedIsFalse(tokenResolver.getAccessClaims(token))
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("Email Not exists"));
 
         targetUser.editProfile(
                 request.nickname(),
@@ -102,10 +105,17 @@ public class UserService {
         userRepository.save(targetUser);
     }
 
+    public UserInfo viewUserProfile(String token){
+        Long userId = tokenResolver.getAccessClaims(token);
+        User targetUser = userRepository.findByUserIdAndIsDeletedIsFalse(userId)
+                .orElseThrow(() -> new NoSuchElementException("Email Not exists"));
+        return UserInfoConverter.from(targetUser);
+    }
+
     public void resignUser(String token) {
         Long userId = tokenResolver.getAccessClaims(token);
         User targetUser = userRepository.findByUserIdAndIsDeletedIsFalse(userId)
-                .orElseThrow(() -> new DuplicateEmailException("Email Not exists"));
+                .orElseThrow(() -> new NoSuchElementException("Email Not exists"));
         targetUser.resignUser();
     }
 

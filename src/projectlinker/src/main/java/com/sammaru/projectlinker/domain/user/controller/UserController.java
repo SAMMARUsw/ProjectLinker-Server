@@ -1,12 +1,12 @@
 package com.sammaru.projectlinker.domain.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.sammaru.projectlinker.domain.user.payload.request.EditProfileRequest;
 import com.sammaru.projectlinker.domain.user.payload.request.SignUpRequest;
-import com.sammaru.projectlinker.domain.user.payload.request.VerifyEmailRequest;
+import com.sammaru.projectlinker.domain.user.payload.response.UserInfo;
 import com.sammaru.projectlinker.domain.user.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,7 @@ public class UserController {
 //    private final MailService mailService;
     private final UserService userService;
 
+    @Tag(name = "이메일 중복체크", description = "이메일 중복체크 api, 실패시 400 에러반환")
     @GetMapping("/users/check")
     public ResponseEntity<Void> checkEmail(@RequestParam @Valid @NotNull String email) {
         userService.checkEmail(email);
@@ -40,13 +41,14 @@ public class UserController {
 //        return ResponseEntity.ok().build();
 //    }
 
+    @Tag(name = "회원가입", description = "회원가입 api")
     @PostMapping("/signup")
     public ResponseEntity<Void> signUp(@RequestBody @Valid SignUpRequest request) {
         userService.signUp(request);
         return ResponseEntity.ok().build();
     }
-
-    @PostMapping("/users/edit")
+    @Tag(name = "회원 정보 수정", description = "회원 정보 수정 api, AccessToken 필요")
+    @PutMapping("/users/edit")
     public ResponseEntity<Void> editProfile(@RequestHeader("Authorization") String token
             , @RequestBody @Valid EditProfileRequest editProfileRequest) throws JsonProcessingException {
 
@@ -54,6 +56,13 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @Tag(name = "회원 정보 조회", description = "회원 정보 조회 api, AccessToken 필요")
+    @GetMapping("/users/profile")
+    public ResponseEntity<UserInfo> viewUserProfile(@RequestHeader("Authorization") String token){
+        return ResponseEntity.ok(userService.viewUserProfile(token));
+    }
+
+    @Tag(name = "회원 탈퇴", description = "회원 탈퇴 api, AccessToken 필요")
     @PostMapping("/resign")
     public ResponseEntity<Void> resignUser(
             @RequestHeader("Authorization") String token) throws JsonProcessingException {
