@@ -6,7 +6,7 @@ public record CreateProjectRequest(
         String title,
         String content,
         ProjectStatus status,
-        Integer vacanctNum,
+        Integer vacancyNum,
         Integer currentNum
 ) {
 }

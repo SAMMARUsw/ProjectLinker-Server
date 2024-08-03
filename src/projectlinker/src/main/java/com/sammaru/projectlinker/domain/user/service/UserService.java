@@ -33,6 +33,7 @@ public class UserService {
 
     public void checkEmail(String email) {
         if (userRepository.existsByEmail(email)) {
+            log.info("Checking email: {}", email);
             throw new DuplicateEmailException("Email already exists");
         }
     }
@@ -59,6 +60,8 @@ public class UserService {
             userSkillRepository.save(userSkill);
             user.getUserSkills().add(userSkill);
         }
+
+        log.info("Create User ID: {}", user.getUserId());
     }
 
     public void editProfile(String token, EditProfileRequest request){
@@ -103,10 +106,18 @@ public class UserService {
         }
 
         userRepository.save(targetUser);
+
+        log.info("Edit User Profile ID: {}", targetUser.getUserId());
     }
 
     public UserInfo viewUserProfile(String token){
         Long userId = tokenResolver.getAccessClaims(token);
+        User targetUser = userRepository.findByUserIdAndIsDeletedIsFalse(userId)
+                .orElseThrow(() -> new NoSuchElementException("Email Not exists"));
+        return UserInfoConverter.from(targetUser);
+    }
+
+    public UserInfo viewUserName(Long userId){
         User targetUser = userRepository.findByUserIdAndIsDeletedIsFalse(userId)
                 .orElseThrow(() -> new NoSuchElementException("Email Not exists"));
         return UserInfoConverter.from(targetUser);
@@ -117,6 +128,8 @@ public class UserService {
         User targetUser = userRepository.findByUserIdAndIsDeletedIsFalse(userId)
                 .orElseThrow(() -> new NoSuchElementException("Email Not exists"));
         targetUser.resignUser();
+
+        log.info("Resign User ID: {}", targetUser.getUserId());
     }
 
 }

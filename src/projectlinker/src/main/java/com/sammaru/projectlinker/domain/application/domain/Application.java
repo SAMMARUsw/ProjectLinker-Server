@@ -35,7 +35,7 @@ public class Application extends BaseEntity {
                 .message(message)
                 .userId(userId)
                 .projectId(projectId)
-                .status(ApplicationStatus.ACCEPT)
+                .status(ApplicationStatus.ON_REVIEW)
                 .build();
     }
 

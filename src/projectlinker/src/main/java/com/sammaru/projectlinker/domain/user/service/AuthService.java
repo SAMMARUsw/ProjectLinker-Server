@@ -47,6 +47,8 @@ public class AuthService {
         redisDao.setRedisValues(loginUser.getEmail(),
                 returnToken.refreshToken(), Duration.ofMillis(refreshTime));
 
+        log.info("Login USER_ID: {}", loginUser.getUserId());
+
         return returnToken;
     }
 
@@ -60,6 +62,8 @@ public class AuthService {
             redisDao.deleteRedisValues(String.valueOf(userId));
         }
         redisDao.setRedisValues("Blacklist_" + userId, refreshToken, Duration.ofMillis(ttl));
+
+        log.info("Logout USER_ID: {}", userId);
     }
 
     public ReturnToken refresh(HttpServletRequest request) {
@@ -74,6 +78,7 @@ public class AuthService {
         redisDao.setRedisValues(loginUser.getEmail(),
                 returnToken.refreshToken(), Duration.ofMillis(refreshTime));
 
+        log.info("Try Refresh Token USER_ID: {}", loginUser.getUserId());
         return returnToken;
     }
 

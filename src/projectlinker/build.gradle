@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.sammaru'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 
 java {
 	toolchain {
@@ -60,6 +60,8 @@ dependencies {
 	implementation 'org.jsoup:jsoup:1.15.3'
 	implementation 'org.seleniumhq.selenium:selenium-java:4.1.2'
 
+	// log
+	implementation 'net.logstash.logback:logstash-logback-encoder:8.0'
 }
 
 tasks.named('test') {

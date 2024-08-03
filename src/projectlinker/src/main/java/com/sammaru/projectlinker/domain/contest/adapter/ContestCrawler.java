@@ -44,7 +44,7 @@ public class ContestCrawler {
 
         List<CrawlingResult> contestList = new ArrayList<>();
         try {
-            log.info("크롤링 시도");
+            log.info("Try Crawling Task");
 
             webDriver.get(baseUrl);
 
@@ -68,11 +68,11 @@ public class ContestCrawler {
                 CrawlingResult crawlingResult = new CrawlingResult(title, company, imageUrl);
                 contestList.add(crawlingResult);
             }
-            log.info("크롤링 종료");
+            log.info("Finish Crawling Task");
 
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("크롤링 실패");
+            log.error("Crawling Failure");
         } finally {
 //            if (webDriver != null) {
 //                webDriver.quit();

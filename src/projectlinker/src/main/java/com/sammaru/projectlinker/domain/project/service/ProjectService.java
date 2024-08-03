@@ -25,16 +25,18 @@ import java.util.stream.Collectors;
 public class ProjectService {
     private final ProjectRepository projectRepository;
     public void createProject(CreateProjectRequest request, Long userId){
-        projectRepository.save(
+        Project project = projectRepository.save(
                 Project.create(
                         request.title(),
                         request.content(),
                         userId,
                         request.status(),
-                        request.vacanctNum(),
+                        request.vacancyNum(),
                         request.currentNum()
                 )
         );
+
+        log.info("Create Project Post ID: {}", project.getProjectId());
     }
     public ViewProjectResponse viewProject(Long projectId){
         Project result = projectRepository.findByProjectIdAndIsDeletedFalse(projectId)
@@ -75,6 +77,8 @@ public class ProjectService {
                 request.vacancyNum(),
                 request.vacancyNum()
         );
+
+        log.info("Edit Project Post ID: {}", project.getProjectId());
     }
     public void deleteProject(Long projectId, Long userId){
         Project project = projectRepository.findById(projectId).orElseThrow(()
@@ -87,5 +91,7 @@ public class ProjectService {
         }
 
         project.delete();
+
+        log.info("Delete Project Post ID: {}", project.getProjectId());
     }
 }

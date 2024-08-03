@@ -42,7 +42,7 @@ public class ContestService {
                 }
             }
         } catch (Exception e){
-            log.error("공모전 생성이 실패하였습니다.");
+            log.error("Create Contest Data was failed");
         }
     }
 
