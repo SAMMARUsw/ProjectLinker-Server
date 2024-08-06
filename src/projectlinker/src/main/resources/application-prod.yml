@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: projectlinker-server
+  profiles:
+    active: jwt, mail
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+server:
+  port: ${SERVER_PORT}
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+crawling:
+  script:
+    scroll: "window.scrollBy(0,350)"
+  url: ${CRAWLING_URL}
+  target:
+    title: ${CRAWLING_TARGET_TITLE}
+    company: ${CRAWLING_TARGET_COMPANY}
+    image: ${CRAWLING_TARGET_IMAGE}
+  attribute:
+    image: ${CRAWLING_ATTRIBUTE_IMAGE}
+schedule:
+  cron: ${SCHEDULE_CRON} # 실제 사용시 매일 자정에 크롤링 요청
+  activate: ${SCHEDULE_ACTIVATE}

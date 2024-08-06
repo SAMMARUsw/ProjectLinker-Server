@@ -64,7 +64,7 @@ public class UserController {
 
     @Tag(name = "USER_ID를 통한 회원 정보 조회", description = "USER_ID를 통한 회원 정보 조회")
     @GetMapping("/users/{userId}")
-    public ResponseEntity<UserInfo> viewUserProfile(@PathVariable @Valid Long userId){
+    public ResponseEntity<UserInfo> viewUserProfileToId(@PathVariable @Valid Long userId){
         return ResponseEntity.ok(userService.viewUserName(userId));
     }
 

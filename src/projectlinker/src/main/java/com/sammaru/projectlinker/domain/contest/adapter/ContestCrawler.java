@@ -40,7 +40,7 @@ public class ContestCrawler {
 
     public List<CrawlingResult> crawlingContest() {
 
-        WebDriver webDriver = webDriverConfig.webDriver();// 새로운 WebDriver 인스턴스 생성
+        WebDriver webDriver = new WebDriverConfig().webDriver();
 
         List<CrawlingResult> contestList = new ArrayList<>();
         try {
@@ -74,9 +74,9 @@ public class ContestCrawler {
             e.printStackTrace();
             log.error("Crawling Failure");
         } finally {
-//            if (webDriver != null) {
-//                webDriver.quit();
-//            }
+            if (webDriver != null) {
+                webDriver.quit();
+            }
         }
 
         return contestList;

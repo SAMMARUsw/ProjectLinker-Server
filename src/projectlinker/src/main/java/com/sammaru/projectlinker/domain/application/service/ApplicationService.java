@@ -75,6 +75,12 @@ public class ApplicationService {
                 .collect(Collectors.toList());
     }
 
+    public ProjectApplyResponse viewApplyById(Long applicationId){
+        Application result = applicationRepository.findByApplicationIdAndIsDeletedFalse(applicationId)
+                .orElseThrow(() -> new NoSuchElementException());
+        return ProjectApplyResponseConverter.from(result);
+    }
+
     public List<ProjectApplyResponse> viewMyApply(Long userId){
         List<Application> result = applicationRepository.findAllByUserIdAndIsDeletedFalse(userId);
         return result.stream()

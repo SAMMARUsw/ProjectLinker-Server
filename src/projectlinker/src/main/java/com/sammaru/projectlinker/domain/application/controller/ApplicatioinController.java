@@ -56,6 +56,12 @@ public class ApplicatioinController {
         return ResponseEntity.ok(applicationService.viewMyApply(userId));
     }
 
+    @Tag(name = "지원서 세부사항 조회", description = "지원서를 조회하는 api.")
+    @GetMapping("/apply/{applicationId}")
+    public ResponseEntity<ProjectApplyResponse> viewApplicationApply(@PathVariable @Valid Long applicationId){
+        return ResponseEntity.ok(applicationService.viewApplyById(applicationId));
+    }
+
     @GetMapping("/{projectId}/member")
     public ResponseEntity<List<ProjectMemberResponse>> viewProjectMembers(@PathVariable @Valid Long projectId){
         return ResponseEntity.ok(applicationService.viewProjectMembers(projectId));
